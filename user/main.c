@@ -7,7 +7,7 @@
 #include <mem.h>
 #include "driver/uart.h"
 
-#define LED_GPIO 13
+static const int pin = 13;
 
 LOCAL struct espconn conn1;
 LOCAL esp_udp udp1;
@@ -21,12 +21,16 @@ LOCAL void recvCB(void *arg, char *pData, unsigned short len) {
 	struct espconn *pEspConn = (struct espconn *) arg;
 	os_printf("Received Data - length %d\n", len);
 
-	if (GPIO_REG_READ(GPIO_OUT_ADDRESS) & (1 << LED_GPIO)) {
-		// set gpio low
-		gpio_output_set(0, (1 << LED_GPIO), 0, 0); 
+	if(len == 0 || (pData[0] != '0' && pData[0] != '1')) {
+		return;
+	}
+
+	if(pData[0] == '0') {
+		os_printf("Clearing bit\n");
+		GPIO_OUTPUT_SET(pin, 0); 
 	} else {
-		// set gpio high
-		gpio_output_set((1 << LED_GPIO), 0, 0, 0);
+		os_printf("Setting bit\n");
+		GPIO_OUTPUT_SET(pin, 1); 
 	}
 }
 
