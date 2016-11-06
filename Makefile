@@ -27,7 +27,7 @@ SDK_BASE	?= $(BUILD_AREA)/esp-open-sdk/sdk
 #
 # # esptool.py path and port
 ESPTOOL		?= esptool.py
-ESPPORT		?= /dev/tty.usbserial-A1043345
+ESPPORT		?= /dev/tty.wchusbserial14140
 
 
 # name for the target project
@@ -132,7 +132,7 @@ $(FW_BASE):
 	$(Q) mkdir -p $@
 
 flash: $(FW_FILE_1) $(FW_FILE_2)
-	$(ESPTOOL) --port $(ESPPORT) --baud 230400 write_flash $(FW_FILE_1_ADDR) $(FW_FILE_1) $(FW_FILE_2_ADDR) $(FW_FILE_2)
+	$(ESPTOOL) --port $(ESPPORT) write_flash $(FW_FILE_1_ADDR) $(FW_FILE_1) $(FW_FILE_2_ADDR) $(FW_FILE_2)
 
 clean:
 	$(Q) rm -rf $(FW_BASE) $(BUILD_BASE)
